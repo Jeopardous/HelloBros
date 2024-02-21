@@ -5,9 +5,11 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useEffect, useState } from 'react';
+import type { PropsWithChildren } from 'react';
 import {
+  Dimensions,
+  Image,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -16,103 +18,132 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
+import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { opacity } from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
+const App: React.FC = () => {
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  const translateX = useSharedValue(0)
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+  const [boxDimensions, setBoxDimensions] = useState({ x: 0, y: 0, width: 0, height: 0 })
+  const [circleDimensions, setCircleDimensions] = useState({ x: 0, y: 0, width: 0, height: 0 })
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const onSwipe = (value: string) => {
+    console.log("Swipe Completed ", value)
+  }
+
+  const pan = Gesture.Pan().onChange((event) => {
+
+    const maxOffset = boxDimensions.width - circleDimensions.width - 20
+    if (event.translationX >= 0 && event.translationX <= maxOffset) {
+      translateX.value = event.translationX
+    }
+  }).onFinalize((event) => {
+    const middleOffset = boxDimensions.width / 2 - circleDimensions.width / 2
+    const end = boxDimensions.width - circleDimensions.width - 20
+
+    if (event.translationX < middleOffset) {
+      translateX.value = withSpring(0)
+    } else {
+      translateX.value = withSpring(end, {}, () => {
+        runOnJS(onSwipe)("By Adarsh")
+      })
+    }
+  })
+
+
+  const swipeAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }]
+  }))
+
+  const textAnimatedStyle = useAnimatedStyle(() => {
+    const end = boxDimensions.width - circleDimensions.width - 20
+    const opacity = interpolate(translateX.value, [0, end], [1, 0])
+
+    return {
+      opacity
+    }
+  })
+
+  const getBoxLayout = (event: any) => {
+
+    const { x, y, width, height } = event.nativeEvent.layout
+    setBoxDimensions({ x, y, width, height })
+  }
+
+  const getCircleLayout = (event: any) => {
+    const { x, y, width, height } = event.nativeEvent.layout
+    setCircleDimensions({ x, y, width, height })
+  }
+
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <View onLayout={getBoxLayout} style={styles.box}>
+          <GestureDetector gesture={pan}>
+            <Animated.View onLayout={getCircleLayout} style={[styles.circle, swipeAnimatedStyle]}>
+              <Image style={styles.swipeArrowIcon} source={require('./src/assets/images/swipe_arrow.png')} />
+            </Animated.View>
+          </GestureDetector>
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+          <Animated.Text style={[styles.swipeTxt, textAnimatedStyle]}> swipe to start</Animated.Text>
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </GestureHandlerRootView>
+
+
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F0A210"
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  box: {
+    flexDirection: "row",
+    width: "50%",
+    height: "8%",
+    borderRadius: 60,
+    backgroundColor: "#ffffff",
+    alignItems: "center",
+    elevation: 10,
+    shadowOffset: {
+      height: 10,
+      width: 2
+    },
+    shadowColor: "#000000",
+    shadowOpacity: 0.1
+
+
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  circle: {
+    width: "28%",
+    height: "80%",
+    borderRadius: 50,
+    backgroundColor: "#F0A210",
+    marginLeft: 10,
+    justifyContent: "center",
+    alignItems: "center"
+  }
+  ,
+  swipeArrowIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: "contain"
   },
-  highlight: {
-    fontWeight: '700',
-  },
+  swipeTxt: {
+    fontSize: 12,
+    color: "#000000",
+    textAlign: "center",
+    marginLeft: 10
+  }
+
+
+
 });
 
 export default App;
