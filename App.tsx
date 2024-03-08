@@ -24,6 +24,7 @@ import { signupFields } from './src/utils/constants';
 import { validateEmail, validateName, validatePassword } from './src/utils/helper';
 import { DateType } from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
+import RippleEffect from './src/components/RippleEffect';
 
 
 
@@ -121,38 +122,7 @@ const App: React.FC = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
-        {signupFields.map((fields, index) => {
-          const fieldName = fields.name as keyof typeof formValues
-          return (<View key={index}>
-            <View key={index}>
-              <CustomInput
-                value={formValues[fieldName]}
-                onChangeText={value => handleInputChange(fields.name, value)}
-                label={fields.label}
-                leftIcon={fields.leftIcon}
-                rightIcon={fields.rightIcon}
-                type={fields.type}
-                selectedValue={selectedValue}
-                selectedDate={selectedDate}
-                handleValueChange={handleValueChange}
-                handleChangeDate={handleDateChage}
-                hidePassword={fields.hidePassword}
-                showPassword={fields.showPassword}
-                error={fieldErrors[fieldName]}
-                callingCode={countryCode}
-                onCountryCodeChange={handleCountryCode}
-                keyboardType={
-                  fields.type === 'phone' ? 'numeric' : 'default'
-                }
-              />
-              {fieldErrors[fieldName] && (
-                <Text style={styles.errorText}>
-                  {fieldErrors[fieldName]}
-                </Text>
-              )}
-            </View>
-          </View>)
-        })}
+        <RippleEffect />
       </View>
     </GestureHandlerRootView>
 
@@ -165,7 +135,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F0A210"
+    backgroundColor: "#ffffff"
   },
   box: {
     flexDirection: "row",
