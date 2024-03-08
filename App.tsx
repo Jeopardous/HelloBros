@@ -19,76 +19,140 @@ import {
   View,
 } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
-import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { opacity } from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
+import CustomInput from './src/components/CustomInput';
+import { signupFields } from './src/utils/constants';
+import { validateEmail, validateName, validatePassword } from './src/utils/helper';
+import { DateType } from 'react-native-ui-datepicker';
+import dayjs from 'dayjs';
+
+
+
 const App: React.FC = () => {
+  const [formValues, setFormValues] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    gender: '',
+    dob: '',
+  });
+  const [fieldErrors, setFieldErrors] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    gender: '',
+    dob: '',
+  });
+  const [selectedValue, setSelectedValue] = useState('female');
+  const [selectedDate, setSelectedDate] = useState<DateType>(dayjs());
+  const [countryCode, setCountryCode] = useState('IN');
 
-  const translateX = useSharedValue(0)
+  const handleInputChange = (fieldName: string, value: string) => {
+    let error = '';
 
-  const [boxDimensions, setBoxDimensions] = useState({ x: 0, y: 0, width: 0, height: 0 })
-  const [circleDimensions, setCircleDimensions] = useState({ x: 0, y: 0, width: 0, height: 0 })
-
-  const onSwipe = (value: string) => {
-    console.log("Swipe Completed ", value)
-  }
-
-  const pan = Gesture.Pan().onChange((event) => {
-
-    const maxOffset = boxDimensions.width - circleDimensions.width - 20
-    if (event.translationX >= 0 && event.translationX <= maxOffset) {
-      translateX.value = event.translationX
+    if (fieldName === 'email') {
+      if (!validateEmail(value) && value !== '') {
+        error = 'Please Enter Valid email Address';
+      }
     }
-  }).onFinalize((event) => {
-    const middleOffset = boxDimensions.width / 2 - circleDimensions.width / 2
-    const end = boxDimensions.width - circleDimensions.width - 20
-
-    if (event.translationX < middleOffset) {
-      translateX.value = withSpring(0)
-    } else {
-      translateX.value = withSpring(end, {}, () => {
-        runOnJS(onSwipe)("By Adarsh")
-      })
+    if (fieldName === 'name') {
+      if (!validateName(value) && value !== '') {
+        error = 'Please Enter Valid Name';
+      }
     }
-  })
-
-
-  const swipeAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }]
-  }))
-
-  const textAnimatedStyle = useAnimatedStyle(() => {
-    const end = boxDimensions.width - circleDimensions.width - 20
-    const opacity = interpolate(translateX.value, [0, end], [1, 0])
-
-    return {
-      opacity
+    if (fieldName === 'password') {
+      if (!validatePassword(value) && value !== '') {
+        error = `Passwords must be at least six characters long and include digits,lower and upper case letters and special characters.`;
+      }
     }
-  })
+    if (fieldName === 'confirmPassword') {
+      if (!validatePassword(value) && value !== '') {
+        error = `Passwords must be at least six characters long and include digits,lower and upper case letters and special characters.`;
+      } else if (formValues.password !== value) {
+        if (value === '') {
+          error = '';
+        } else error = 'Password does not match';
+      }
+    }
+    setFormValues(prevState => ({
+      ...prevState,
+      [fieldName]: value,
+    }));
 
-  const getBoxLayout = (event: any) => {
+    setFieldErrors(prevErrors => ({
+      ...prevErrors,
+      [fieldName]: error,
+    }));
+  };
 
-    const { x, y, width, height } = event.nativeEvent.layout
-    setBoxDimensions({ x, y, width, height })
-  }
+  const handleValueChange = (value: number) => {
+    console.log('BASASASAS::::', value);
+    setSelectedValue(value === 1 ? 'Male' : 'Female');
+    setFormValues(prevState => ({
+      ...prevState,
+      gender: value === 1 ? 'Male' : 'Female',
+    }));
+    setFieldErrors(prevErrors => ({
+      ...prevErrors,
+      gender: "",
+    }));
+  };
+  const handleDateChage = (date: DateType) => {
+    const birthDate = dayjs(date).format('YYYY-MM-DD');
+    setSelectedDate(date);
+    setFormValues(prevState => ({
+      ...prevState,
+      dob: birthDate,
+    }));
+    setFieldErrors(prevErrors => ({
+      ...prevErrors,
+      dob: "",
+    }));
+  };
 
-  const getCircleLayout = (event: any) => {
-    const { x, y, width, height } = event.nativeEvent.layout
-    setCircleDimensions({ x, y, width, height })
-  }
+  const handleCountryCode = (name: string, code: string) => {
+    setCountryCode(name);
+  };
+
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <View onLayout={getBoxLayout} style={styles.box}>
-          <GestureDetector gesture={pan}>
-            <Animated.View onLayout={getCircleLayout} style={[styles.circle, swipeAnimatedStyle]}>
-              <Image style={styles.swipeArrowIcon} source={require('./src/assets/images/swipe_arrow.png')} />
-            </Animated.View>
-          </GestureDetector>
-
-          <Animated.Text style={[styles.swipeTxt, textAnimatedStyle]}> swipe to start</Animated.Text>
-
-        </View>
+        {signupFields.map((fields, index) => {
+          const fieldName = fields.name as keyof typeof formValues
+          return (<View key={index}>
+            <View key={index}>
+              <CustomInput
+                value={formValues[fieldName]}
+                onChangeText={value => handleInputChange(fields.name, value)}
+                label={fields.label}
+                leftIcon={fields.leftIcon}
+                rightIcon={fields.rightIcon}
+                type={fields.type}
+                selectedValue={selectedValue}
+                selectedDate={selectedDate}
+                handleValueChange={handleValueChange}
+                handleChangeDate={handleDateChage}
+                hidePassword={fields.hidePassword}
+                showPassword={fields.showPassword}
+                error={fieldErrors[fieldName]}
+                callingCode={countryCode}
+                onCountryCodeChange={handleCountryCode}
+                keyboardType={
+                  fields.type === 'phone' ? 'numeric' : 'default'
+                }
+              />
+              {fieldErrors[fieldName] && (
+                <Text style={styles.errorText}>
+                  {fieldErrors[fieldName]}
+                </Text>
+              )}
+            </View>
+          </View>)
+        })}
       </View>
     </GestureHandlerRootView>
 
@@ -140,7 +204,13 @@ const styles = StyleSheet.create({
     color: "#000000",
     textAlign: "center",
     marginLeft: 10
-  }
+  },
+
+  errorText: {
+    fontSize: 10,
+    color: "#FF1919",
+    marginVertical: 5,
+  },
 
 
 
