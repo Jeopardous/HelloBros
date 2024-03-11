@@ -19,110 +19,19 @@ import {
   View,
 } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
-import CustomInput from './src/components/CustomInput';
-import { signupFields } from './src/utils/constants';
-import { validateEmail, validateName, validatePassword } from './src/utils/helper';
-import { DateType } from 'react-native-ui-datepicker';
-import dayjs from 'dayjs';
-import RippleEffect from './src/components/RippleEffect';
+import CircleLoader from './src/components/CircleLoader';
+
+
 
 
 
 const App: React.FC = () => {
-  const [formValues, setFormValues] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    gender: '',
-    dob: '',
-  });
-  const [fieldErrors, setFieldErrors] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    gender: '',
-    dob: '',
-  });
-  const [selectedValue, setSelectedValue] = useState('female');
-  const [selectedDate, setSelectedDate] = useState<DateType>(dayjs());
-  const [countryCode, setCountryCode] = useState('IN');
-
-  const handleInputChange = (fieldName: string, value: string) => {
-    let error = '';
-
-    if (fieldName === 'email') {
-      if (!validateEmail(value) && value !== '') {
-        error = 'Please Enter Valid email Address';
-      }
-    }
-    if (fieldName === 'name') {
-      if (!validateName(value) && value !== '') {
-        error = 'Please Enter Valid Name';
-      }
-    }
-    if (fieldName === 'password') {
-      if (!validatePassword(value) && value !== '') {
-        error = `Passwords must be at least six characters long and include digits,lower and upper case letters and special characters.`;
-      }
-    }
-    if (fieldName === 'confirmPassword') {
-      if (!validatePassword(value) && value !== '') {
-        error = `Passwords must be at least six characters long and include digits,lower and upper case letters and special characters.`;
-      } else if (formValues.password !== value) {
-        if (value === '') {
-          error = '';
-        } else error = 'Password does not match';
-      }
-    }
-    setFormValues(prevState => ({
-      ...prevState,
-      [fieldName]: value,
-    }));
-
-    setFieldErrors(prevErrors => ({
-      ...prevErrors,
-      [fieldName]: error,
-    }));
-  };
-
-  const handleValueChange = (value: number) => {
-    console.log('BASASASAS::::', value);
-    setSelectedValue(value === 1 ? 'Male' : 'Female');
-    setFormValues(prevState => ({
-      ...prevState,
-      gender: value === 1 ? 'Male' : 'Female',
-    }));
-    setFieldErrors(prevErrors => ({
-      ...prevErrors,
-      gender: "",
-    }));
-  };
-  const handleDateChage = (date: DateType) => {
-    const birthDate = dayjs(date).format('YYYY-MM-DD');
-    setSelectedDate(date);
-    setFormValues(prevState => ({
-      ...prevState,
-      dob: birthDate,
-    }));
-    setFieldErrors(prevErrors => ({
-      ...prevErrors,
-      dob: "",
-    }));
-  };
-
-  const handleCountryCode = (name: string, code: string) => {
-    setCountryCode(name);
-  };
 
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <RippleEffect />
+        <CircleLoader />
       </View>
     </GestureHandlerRootView>
 
