@@ -48,3 +48,11 @@ export const signupFields = [
     type: 'password',
   },
 ];
+
+export const dragImages = [
+  {id: 1, path: require('../assets/images/dragdrop/table.png')},
+  {id: 2, path: require('../assets/images/dragdrop/chair.png')},
+  {id: 3, path: require('../assets/images/dragdrop/desklamp.png')},
+  {id: 4, path: require('../assets/images/dragdrop/carpet.png')},
+  {id: 5, path: require('../assets/images/dragdrop/brickwall.png')},
+];

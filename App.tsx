@@ -19,7 +19,7 @@ import {
   View,
 } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
-import CircleLoader from './src/components/CircleLoader';
+import DragDrop from './src/components/DragDrop';
 
 
 
@@ -31,7 +31,7 @@ const App: React.FC = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <CircleLoader />
+        <DragDrop />
       </View>
     </GestureHandlerRootView>
 
