@@ -20,6 +20,7 @@ import {
 } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import DragDrop from './src/components/DragDrop';
+import RootNavigator from './src/navigation/RootNavigator';
 
 
 
@@ -30,9 +31,7 @@ const App: React.FC = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <DragDrop />
-      </View>
+      <RootNavigator />
     </GestureHandlerRootView>
 
 
