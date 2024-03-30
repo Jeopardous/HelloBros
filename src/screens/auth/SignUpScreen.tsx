@@ -1,13 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import NavigationActions from '../../navigation/NavigationActions'
+import SwipeCards from '../../components/SwipeCards'
 
 const SignUpScreen = () => {
     return (
         <View>
-            <Text onPress={() => NavigationActions.navigate("SignIn")}>SignUpScreen</Text>
-
-            <Button />
+            <SwipeCards />
         </View>
     )
 }
