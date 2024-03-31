@@ -21,6 +21,8 @@ import {
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import DragDrop from './src/components/DragDrop';
 import RootNavigator from './src/navigation/RootNavigator';
+import { I18nextProvider } from 'react-i18next';
+import i18next from './src/services/i18next';
 
 
 
@@ -30,9 +32,12 @@ const App: React.FC = () => {
 
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <RootNavigator />
-    </GestureHandlerRootView>
+    <I18nextProvider i18n={i18next}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <RootNavigator />
+      </GestureHandlerRootView>
+    </I18nextProvider>
+
 
 
   );
