@@ -28,6 +28,7 @@ import CustomInput from '../../components/CustomInput';
 import { colors } from '../../utils/colors';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
+import { fonts, fontSize } from '../../utils/fonts';
 
 const SignUpScreen = () => {
     const [formValues, setFormValues] = useState({
@@ -249,7 +250,8 @@ const styles = StyleSheet.create({
     btnTxt: {
         color: colors.white,
         alignSelf: "center",
-        fontSize: 16,
-        fontWeight: "bold"
+        fontFamily: fonts.bold,
+        fontSize: fontSize.font16
+
     }
 })
