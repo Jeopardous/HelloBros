@@ -1,6 +1,8 @@
 {
   "signin": "Sign in screen",
   "signup": "Sign Up screen",
+  "signin-account":"Sign In to your account.",
+  "forgot-password":"Forgot Password?",
   "next-screen":"Next Screen",
   "full-name":"Full Name",
   "phone":"Phone",
