@@ -102,7 +102,9 @@ const styles = StyleSheet.create({
         },
         shadowColor: "#3E3C49",
         shadowOpacity: 0.3,
-        shadowRadius: 8
+        shadowRadius: 8,
+        position: "absolute",
+        bottom: 0
 
     },
     sheetHeader: {
