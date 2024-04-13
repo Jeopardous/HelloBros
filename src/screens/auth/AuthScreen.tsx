@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { colors } from '../../utils/colors';
 import { fonts, fontSize } from '../../utils/fonts';
 import SignInScreen from './SignInScreen';
+import NavigationActions from '../../navigation/NavigationActions';
 const AuthScreen = () => {
     const animationRef = useRef<LottieView>(null)
     const { t } = useTranslation()
@@ -40,7 +41,7 @@ const AuthScreen = () => {
                 <TouchableOpacity onPress={() => onSignIn()} style={styles.buttonPrimary}>
                     <Text style={styles.signinTxt}>{t("signin")}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonSec}>
+                <TouchableOpacity onPress={() => NavigationActions.navigate("SignUp")} style={styles.buttonSec}>
                     <Text style={styles.signupTxt}>{t("signup")}</Text>
                 </TouchableOpacity>
 
