@@ -10,6 +10,7 @@ import { fonts, fontSize } from '../../utils/fonts';
 import CustomInput from '../../components/CustomInput';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import NavigationActions from '../../navigation/NavigationActions';
 
 const { height } = Dimensions.get("window")
 
@@ -75,7 +76,7 @@ const SignInScreen: React.FC<BottomSheetProps> = ({ onToggle }) => {
                 />
 
                 <View style={styles.buttonView}>
-                    <TouchableOpacity style={styles.buttonPrimary}>
+                    <TouchableOpacity onPress={() => NavigationActions.navigate("Home")} style={styles.buttonPrimary}>
                         <Text style={styles.signinTxt}>{t("continue")}</Text>
                     </TouchableOpacity>
                 </View>
