@@ -10,6 +10,7 @@ import { colors } from '../../utils/colors';
 import { fonts, fontSize } from '../../utils/fonts';
 import SignInScreen from './SignInScreen';
 import NavigationActions from '../../navigation/NavigationActions';
+import EffectSlider from '../../components/EffectSlider';
 const AuthScreen = () => {
     const animationRef = useRef<LottieView>(null)
     const { t } = useTranslation()
@@ -27,7 +28,7 @@ const AuthScreen = () => {
     }
     return (
         <View style={styles.container}>
-            <View style={styles.body}>
+            {/* <View style={styles.body}>
                 <LottieView
                     ref={animationRef}
                     source={require('../../utils/handshake.json')}
@@ -47,7 +48,8 @@ const AuthScreen = () => {
 
             </View>
 
-            {isSignIn && <SignInScreen onToggle={onToggle} />}
+            {isSignIn && <SignInScreen onToggle={onToggle} />} */}
+            <EffectSlider />
 
         </View>
     )
