@@ -10,6 +10,7 @@ import { colors } from '../../utils/colors';
 import { fonts, fontSize } from '../../utils/fonts';
 import SignInScreen from './SignInScreen';
 import NavigationActions from '../../navigation/NavigationActions';
+import ButtonRipple from '../../components/ButtonRipple';
 const AuthScreen = () => {
     const animationRef = useRef<LottieView>(null)
     const { t } = useTranslation()
@@ -27,17 +28,18 @@ const AuthScreen = () => {
     }
     return (
         <View style={styles.container}>
-            <View style={styles.body}>
-                <LottieView
+            <View style={[styles.body, { justifyContent: "center", alignItems: "center" }]}>
+                {/* <LottieView
                     ref={animationRef}
                     source={require('../../utils/handshake.json')}
                     autoPlay={false}
                     loop={false}
                     style={styles.lottieView}
                     speed={speed}
-                />
+                /> */}
+                <ButtonRipple />
             </View>
-            <View style={styles.footer}>
+            {/* <View style={styles.footer}>
                 <TouchableOpacity onPress={() => onSignIn()} style={styles.buttonPrimary}>
                     <Text style={styles.signinTxt}>{t("signin")}</Text>
                 </TouchableOpacity>
@@ -47,7 +49,7 @@ const AuthScreen = () => {
 
             </View>
 
-            {isSignIn && <SignInScreen onToggle={onToggle} />}
+            {isSignIn && <SignInScreen onToggle={onToggle} />} */}
 
         </View>
     )

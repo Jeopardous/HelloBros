@@ -20,9 +20,9 @@ const RootNavigator = () => {
     return (
         <NavigationContainer ref={navigationRef}>
             <Stack.Navigator>
+                <Stack.Screen name='Auth' component={AuthScreen}></Stack.Screen>
                 <Stack.Screen name='Connect' component={ConnectDevice}></Stack.Screen>
 
-                <Stack.Screen name='Auth' component={AuthScreen}></Stack.Screen>
                 <Stack.Screen name='SignUp' component={SignUpScreen}></Stack.Screen>
                 {/* <Stack.Screen name='SignIn' component={SignInScreen}></Stack.Screen> */}
                 <Stack.Screen name='Home' component={HomeScreen}></Stack.Screen>
