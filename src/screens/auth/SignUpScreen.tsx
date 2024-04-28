@@ -5,7 +5,7 @@ import SwipeCards from '../../components/SwipeCards'
 
 const SignUpScreen = () => {
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <SwipeCards />
         </View>
     )
