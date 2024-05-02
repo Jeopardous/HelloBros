@@ -1,23 +1,22 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
-import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import {
-    heightPercentageToDP as hp
-} from 'react-native-responsive-screen';
-import { Svg } from 'react-native-svg';
-const { width, height } = Dimensions.get("window")
-// Omitting imports for brevity
+import Animated, { AnimatedRef, interpolate, SharedValue, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { FlatList } from 'react-native-gesture-handler';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+const { width } = Dimensions.get("window");
 
-const AnimatedSVG = Animated.createAnimatedComponent(Svg)
+const CARD_WIDTH = width;
+const CARD_MARGIN = 0;
+const EMPTY_CARD = (width - CARD_WIDTH) / 2 - CARD_MARGIN;
 
 const SwipeCards = () => {
     const API_KEY = 'qAKxm4Le3SMk3JiPE7iY3Tq4y8253FOxQ0QzkXeKTqswZ9X6YxSdTzap';
-    const CARD_WIDTH = width * 0.8
-    const CARD_MARGIN = 5
-    const EMPTY_CARD = (width - CARD_WIDTH) / 2 - CARD_MARGIN
     const SEARCH_QUERY = 'nature';
-    const [listData, setListData] = useState<any>([])
+    const [listData, setListData] = useState<any>([]);
+    const flatListRef = useAnimatedRef<FlatList>()
+    const contentOffset = useSharedValue(0)
+
     useEffect(() => {
         const fetchPhotos = async () => {
             try {
@@ -26,35 +25,25 @@ const SwipeCards = () => {
                         Authorization: API_KEY,
                     },
                 });
-                setListData([{ "left": true }, ...response.data.photos, { "right": true }])
+                // setListData([{ "left": true }, ...response.data.photos, { "right": true }]);
+                setListData(response.data.photos);
+
             } catch (error) {
                 console.error('Error fetching photos:', error);
             }
         };
         fetchPhotos();
-    }, [])
-
-    const scrollX = useSharedValue(0);
-
-    const handleScroll = useAnimatedScrollHandler({
-        onScroll: (event) => {
-            scrollX.value = event.contentOffset.x
-        },
-    })
-
+    }, []);
 
 
     const renderCards = ({ item, index }: any) => {
-        return <CardView item={item} index={index} scrollX={scrollX} />
-
-    }
-
-
+        return <CardView item={item} index={index} contentOffset={contentOffset} />;
+    };
 
     return (
-        <View >
+        <View style={{ flex: 1 }}>
             {listData && listData.length > 0 && (
-                <Animated.FlatList
+                <FlatList
                     data={listData}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={renderCards}
@@ -63,65 +52,73 @@ const SwipeCards = () => {
                     bounces={false}
                     horizontal
                     scrollEventThrottle={16}
-                    onScroll={handleScroll}
+                    onScroll={(event) => {
+                        contentOffset.value = event.nativeEvent.contentOffset.x
+                    }}
                 />
             )}
-
         </View>
-    )
+    );
 }
-
-export default SwipeCards
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
     card: {
-        height: hp(60),
+        height: hp(100),
         backgroundColor: "transparent",
-        borderRadius: 10,
+        // borderRadius: 10,
     },
     image: {
         width: "100%",
         height: "100%",
         resizeMode: "cover",
-        borderRadius: 10,
+        // borderRadius: 10,
     }
-})
+});
 
-
-const CardView = ({ item, index, scrollX }: any) => {
-    const CARD_WIDTH = width * 0.8
-    const CARD_MARGIN = 5
-    const EMPTY_CARD = (width - CARD_WIDTH) / 2 - CARD_MARGIN
-
+const CardView = ({ item, index, contentOffset }: { item: any; index: number; contentOffset: SharedValue<number> }) => {
+    const initialTranslateX = index * (CARD_WIDTH + CARD_MARGIN);
     const animatedStyle = useAnimatedStyle(() => {
-        const x = interpolate(scrollX.value, [(index) * CARD_WIDTH, (index) * CARD_WIDTH], [width, 0])
-        console.log("X", x)
+        const inputRange = [
+            (index - 1) * (CARD_WIDTH + CARD_MARGIN), // Start of previous card
+            index * (CARD_WIDTH + CARD_MARGIN), // Start of current card
+            (index + 1) * (CARD_WIDTH + CARD_MARGIN) // Start of next card
+        ];
+
+        const outputRange = [
+            0, // Translate left to show previous card
+            0, // Center current card
+            CARD_WIDTH * 0.8 // Translate right to show next card
+        ];
+
+        const translateX = interpolate(contentOffset.value, inputRange, outputRange);
+
+
         return {
-            transform: [{ translateX: x }]
-        }
-    })
+            transform: [{ translateX }] // Apply the translation
+        };
+    });
+
+
+
     if (!item.src) {
         return (
             <View style={{
                 width: EMPTY_CARD, backgroundColor: "red",
-                ...item.left ? { marginRight: CARD_MARGIN }
-                    : { marginLeft: CARD_MARGIN }
-            }}>
-
-            </View>
+                ...item.left ? { marginRight: CARD_MARGIN } : { marginLeft: CARD_MARGIN }
+            }} />
         )
     }
+
     return (
-        <Animated.View style={[styles.card,
-        { width: CARD_WIDTH, marginHorizontal: CARD_MARGIN },
+        <Animated.View style={[styles.card, { width: CARD_WIDTH, height: "100%", marginHorizontal: CARD_MARGIN },
             animatedStyle
-        ]} >
-            <Image source={{ uri: item?.src?.original }}
-                style={styles.image} />
+        ]}>
+            <Image source={{ uri: item?.src?.original }} style={styles.image} />
         </Animated.View>
     );
 }
 
+export default SwipeCards;
