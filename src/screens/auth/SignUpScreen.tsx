@@ -1,13 +1,14 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import NavigationActions from '../../navigation/NavigationActions'
 import SwipeCards from '../../components/SwipeCards'
+import Typewriter from '../../components/Typewriter'
 
 const SignUpScreen = () => {
     return (
-        <View style={{ flex: 1 }}>
-            <SwipeCards />
-        </View>
+        <SafeAreaView style={{ flex: 1 }}>
+
+        </SafeAreaView>
     )
 }
 const Button = () => {
