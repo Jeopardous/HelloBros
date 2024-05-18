@@ -56,3 +56,11 @@ export const dragImages = [
   {id: 4, path: require('../assets/images/dragdrop/carpet.png')},
   {id: 5, path: require('../assets/images/dragdrop/brickwall.png')},
 ];
+
+export const IMAGES = [
+  {src: 'https://images.pexels.com/photos/733860/pexels-photo-733860.jpeg'},
+  {src: 'https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg'},
+  {src: 'https://images.pexels.com/photos/1820563/pexels-photo-1820563.jpeg'},
+  {src: 'https://images.pexels.com/photos/707344/pexels-photo-707344.jpeg'},
+  {src: 'https://images.pexels.com/photos/2086622/pexels-photo-2086622.jpeg'},
+];

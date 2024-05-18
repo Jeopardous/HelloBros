@@ -2,11 +2,12 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import NavigationActions from '../../navigation/NavigationActions'
 import SwipeCards from '../../components/SwipeCards'
+import FixedSwipeCards from '../../components/FixedSwipeCards'
 
 const SignUpScreen = () => {
     return (
         <View style={{ flex: 1 }}>
-            <SwipeCards />
+            <FixedSwipeCards />
         </View>
     )
 }

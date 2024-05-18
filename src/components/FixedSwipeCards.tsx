@@ -11,7 +11,7 @@ const CARD_HEIGHT = height * 0.5
 
 const SNAP_TO_INTERVAL = CARD_WIDTH + (width * 0.1);
 
-const SwipeCards = () => {
+const FixedSwipeCards = () => {
     const API_KEY = 'qAKxm4Le3SMk3JiPE7iY3Tq4y8253FOxQ0QzkXeKTqswZ9X6YxSdTzap';
     const SEARCH_QUERY = 'nature';
     const [listData, setListData] = useState<any>([]);
@@ -160,4 +160,4 @@ const CardView = ({ item, index, contentOffset }: { item: any; index: number; co
     );
 }
 
-export default SwipeCards;
+export default FixedSwipeCards;
