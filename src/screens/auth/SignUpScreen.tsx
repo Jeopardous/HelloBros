@@ -3,6 +3,7 @@ import React from 'react'
 import NavigationActions from '../../navigation/NavigationActions'
 import SwipeCards from '../../components/SwipeCards'
 import FixedSwipeCards from '../../components/FixedSwipeCards'
+import SensorCard from '../../components/SensorCard'
 
 const SignUpScreen = () => {
     return (

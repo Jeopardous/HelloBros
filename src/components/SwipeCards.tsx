@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, StyleSheet, View, FlatList, FlatListProps } from 'react-native';
-import Animated, { Extrapolation, interpolate, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { Dimensions, StyleSheet, View, FlatList, FlatListProps, NativeUIEvent } from 'react-native';
+import Animated, { Extrapolation, interpolate, runOnJS, SensorType, SharedValue, useAnimatedSensor, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { colors } from '../utils/colors';
 
@@ -24,7 +24,7 @@ const SwipeCards: React.FC = () => {
     const [listData, setListData] = useState<Photo[]>([]);
     const contentOffset = useSharedValue(0);
     const flatListRef = useRef<FlatList<Photo>>(null);
-
+    const currentIndex = useSharedValue(0);
     useEffect(() => {
         const fetchPhotos = async () => {
             try {
@@ -49,12 +49,20 @@ const SwipeCards: React.FC = () => {
         }
     };
 
+    const setCurrentIndex = (index: number) => {
+        currentIndex.value = index;
+    };
+    const handleScroll = (event: any) => {
+        contentOffset.value = event.nativeEvent.contentOffset.x;
+        const index = Math.round(event.nativeEvent.contentOffset.x / SNAP_TO_INTERVAL);
+        runOnJS(setCurrentIndex)(index);
+    };
     useEffect(() => {
         scrollToMiddleItem();
     }, [listData]);
 
     const renderCards: FlatListProps<Photo>['renderItem'] = ({ item, index }) => {
-        return <CardView item={item} index={index} contentOffset={contentOffset} />;
+        return <CardView item={item} index={index} contentOffset={contentOffset} currentIndex={currentIndex} />;
     };
 
     return (
@@ -73,9 +81,7 @@ const SwipeCards: React.FC = () => {
                         scrollEventThrottle={16}
                         showsHorizontalScrollIndicator={false}
                         contentContainerStyle={{ paddingHorizontal: VISIBLE_OFFSET }} // Add padding to center the first and last cards
-                        onScroll={(event) => {
-                            contentOffset.value = event.nativeEvent.contentOffset.x;
-                        }}
+                        onScroll={handleScroll}
                     />
                 )}
             </View>
@@ -106,10 +112,26 @@ const styles = StyleSheet.create({
 interface CardViewProps {
     item: Photo;
     index: number;
-    contentOffset: Animated.SharedValue<number>;
+    contentOffset: SharedValue<number>;
+    currentIndex: SharedValue<number>;
 }
 
-const CardView: React.FC<CardViewProps> = ({ item, index, contentOffset }) => {
+const CardView: React.FC<CardViewProps> = ({ item, index, contentOffset, currentIndex }) => {
+
+    const gravitySensor = useAnimatedSensor(SensorType.GRAVITY);
+    const animatedCardStyle = useAnimatedStyle(() => {
+        // Apply translation only to the currently centered card
+        const isCenteredCard = index === currentIndex.value;
+        const translateXGravity = isCenteredCard ? gravitySensor.sensor.value.x : 0;
+        const translateYGravity = isCenteredCard ? gravitySensor.sensor.value.y : 0;
+
+        return {
+            transform: [
+                { translateX: translateXGravity },
+                { translateY: translateYGravity },
+            ],
+        };
+    });
     const animatedStyle = useAnimatedStyle(() => {
         const inputRange = [
             (index - 1) * SNAP_TO_INTERVAL,
@@ -125,11 +147,11 @@ const CardView: React.FC<CardViewProps> = ({ item, index, contentOffset }) => {
     });
 
     return (
-        <View style={{
+        <Animated.View style={[{
             width: CARD_WIDTH,
             height: CARD_HEIGHT,
             marginHorizontal: 5,
-        }}>
+        }, animatedCardStyle]}>
             <View style={[
                 {
                     width: "100%",
@@ -144,7 +166,7 @@ const CardView: React.FC<CardViewProps> = ({ item, index, contentOffset }) => {
                     source={{ uri: item?.src?.original }}
                     style={[styles.image, animatedStyle]} />
             </View>
-        </View>
+        </Animated.View>
     );
 };
 
