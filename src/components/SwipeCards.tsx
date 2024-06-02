@@ -1,23 +1,30 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, Image, StyleSheet, View } from 'react-native';
-import Animated, { AnimatedRef, Extrapolation, interpolate, SharedValue, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import { FlatList } from 'react-native-gesture-handler';
+import { Dimensions, StyleSheet, View, FlatList, FlatListProps } from 'react-native';
+import Animated, { Extrapolation, interpolate, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { colors } from '../utils/colors';
+
 const { width, height } = Dimensions.get("window");
 
-const CARD_WIDTH = width;
-const CARD_HEIGHT = height * 0.5
+const CARD_WIDTH = width * 0.8; // Decrease the card width
+const CARD_HEIGHT = height * 0.5;
+const VISIBLE_OFFSET = (width - CARD_WIDTH) / 2; // Visible offset for left and right cards
+const SNAP_TO_INTERVAL = CARD_WIDTH + 12.5 // Add some space between cards
 
-const SNAP_TO_INTERVAL = CARD_WIDTH + (width * 0.1);
+interface Photo {
+    src: {
+        original: string;
+    };
+}
 
-const SwipeCards = () => {
+const SwipeCards: React.FC = () => {
     const API_KEY = 'qAKxm4Le3SMk3JiPE7iY3Tq4y8253FOxQ0QzkXeKTqswZ9X6YxSdTzap';
     const SEARCH_QUERY = 'nature';
-    const [listData, setListData] = useState<any>([]);
-    const contentOffset = useSharedValue(0)
-    const flatListRef = useRef<FlatList<any>>(null);
-    const [listRendered, setListRendered] = useState(false);
+    const [listData, setListData] = useState<Photo[]>([]);
+    const contentOffset = useSharedValue(0);
+    const flatListRef = useRef<FlatList<Photo>>(null);
+
     useEffect(() => {
         const fetchPhotos = async () => {
             try {
@@ -27,7 +34,6 @@ const SwipeCards = () => {
                     },
                 });
                 setListData(response.data.photos);
-
             } catch (error) {
                 console.error('Error fetching photos:', error);
             }
@@ -38,114 +44,99 @@ const SwipeCards = () => {
     const scrollToMiddleItem = () => {
         if (listData.length > 0 && flatListRef.current) {
             const initialIndex = Math.floor(listData.length / 2);
-            const initialOffset = initialIndex * CARD_WIDTH;
-            flatListRef.current.scrollToOffset({ offset: initialOffset, animated: false });
+            const initialOffset = initialIndex * (SNAP_TO_INTERVAL);
+            flatListRef.current.scrollToOffset({ offset: initialOffset, animated: true });
         }
     };
+
     useEffect(() => {
         scrollToMiddleItem();
     }, [listData]);
 
-
-    const renderCards = ({ item, index }: any) => {
+    const renderCards: FlatListProps<Photo>['renderItem'] = ({ item, index }) => {
         return <CardView item={item} index={index} contentOffset={contentOffset} />;
     };
 
     return (
         <View style={styles.container}>
-            {listData && listData.length > 0 && (
-                <FlatList
-                    ref={flatListRef}
-                    data={listData}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={renderCards}
-                    snapToInterval={width}
-                    decelerationRate={0}
-                    bounces={false}
-                    horizontal
-                    scrollEventThrottle={16}
-                    onScroll={(event) => {
-                        contentOffset.value = event.nativeEvent.contentOffset.x
-                    }}
-
-                />
-            )}
-
-
+            <View style={styles.listView}>
+                {listData && listData.length > 0 && (
+                    <FlatList
+                        ref={flatListRef}
+                        data={listData}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={renderCards}
+                        snapToInterval={SNAP_TO_INTERVAL}
+                        decelerationRate={0}
+                        bounces={false}
+                        horizontal
+                        scrollEventThrottle={16}
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{ paddingHorizontal: VISIBLE_OFFSET }} // Add padding to center the first and last cards
+                        onScroll={(event) => {
+                            contentOffset.value = event.nativeEvent.contentOffset.x;
+                        }}
+                    />
+                )}
+            </View>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "white",
-
+        paddingTop: hp(10),
+        backgroundColor: "#000000"
     },
-    card: {
-
-
-    },
+    card: {},
     image: {
-        width: CARD_WIDTH,
+        width: width,
         height: CARD_HEIGHT,
         resizeMode: "cover",
-
     },
     listView: {
         width: "100%",
+        height: hp(60),
         justifyContent: "center",
         alignItems: "center"
     }
 });
 
-const CardView = ({ item, index, contentOffset }: { item: any; index: number; contentOffset: SharedValue<number> }) => {
+interface CardViewProps {
+    item: Photo;
+    index: number;
+    contentOffset: Animated.SharedValue<number>;
+}
 
-    console.log("item?.src?.original", item?.src?.original)
+const CardView: React.FC<CardViewProps> = ({ item, index, contentOffset }) => {
     const animatedStyle = useAnimatedStyle(() => {
         const inputRange = [
-            (index - 1) * (CARD_WIDTH),
-            (index) * (CARD_WIDTH),
-            (index + 1) * (CARD_WIDTH)
+            (index - 1) * SNAP_TO_INTERVAL,
+            index * SNAP_TO_INTERVAL,
+            (index + 1) * SNAP_TO_INTERVAL
         ];
 
-        const outputRange = [
-            -CARD_WIDTH * 0.9,
-            0,
-            CARD_WIDTH * 0.9
-        ];
-
-        const translateX = interpolate(contentOffset.value, inputRange, outputRange, Extrapolation.CLAMP);
+        const translateX = interpolate(contentOffset.value, inputRange, [-CARD_WIDTH * 0.8, 0, CARD_WIDTH * 0.8]);
 
         return {
             transform: [{ translateX }],
         };
-
-
     });
 
-
-
     return (
-
         <View style={{
-            shadowOffset: {
-                height: 10,
-                width: 2
-            },
-            shadowColor: "#000000",
-            shadowOpacity: 0.1,
-            padding: 5,
-            backgroundColor: "#ffffff"
-
+            width: CARD_WIDTH,
+            height: CARD_HEIGHT,
+            marginHorizontal: 5,
         }}>
             <View style={[
                 {
-                    width: CARD_WIDTH - 10, height: CARD_HEIGHT, overflow: "hidden",
-                    backgroundColor: "white",
+                    width: "100%",
+                    overflow: "hidden",
                     alignItems: "center",
                     borderRadius: 10,
-                    borderWidth: 0,
+                    borderWidth: 5,
                     borderColor: "white"
                 }
             ]}>
@@ -154,10 +145,7 @@ const CardView = ({ item, index, contentOffset }: { item: any; index: number; co
                     style={[styles.image, animatedStyle]} />
             </View>
         </View>
-
-
-
     );
-}
+};
 
 export default SwipeCards;

@@ -7,7 +7,7 @@ import FixedSwipeCards from '../../components/FixedSwipeCards'
 const SignUpScreen = () => {
     return (
         <View style={{ flex: 1 }}>
-            <FixedSwipeCards />
+            <SwipeCards />
         </View>
     )
 }
