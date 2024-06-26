@@ -3,11 +3,12 @@ import React from 'react'
 import NavigationActions from '../../navigation/NavigationActions'
 import SwipeCards from '../../components/SwipeCards'
 import FixedSwipeCards from '../../components/FixedSwipeCards'
+import SensorAnimation from '../../components/SensorAnimation'
 
 const SignUpScreen = () => {
     return (
         <View style={{ flex: 1 }}>
-            <SwipeCards />
+            <SensorAnimation />
         </View>
     )
 }
