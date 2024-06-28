@@ -23,6 +23,7 @@ import {
 import dayjs from 'dayjs';
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker';
 import CountryPicker, { CountryCode } from 'react-native-country-picker-modal';
+import { useTranslation } from 'react-i18next';
 interface CustomInputProps extends TextInputProps {
     label: string;
     style?: TextInput['props']['style'] | any;
@@ -58,6 +59,7 @@ const CustomInput = forwardRef<TextInput, CustomInputProps>((props, ref) => {
     const [isPasswordVisible, setPasswordVisible] = useState(true);
     const animatedValue = useSharedValue(0);
 
+    const { t } = useTranslation()
 
 
 
@@ -305,7 +307,7 @@ const CustomInput = forwardRef<TextInput, CustomInputProps>((props, ref) => {
                                 backgroundColor: isFocused ? '#ffffff' : 'transparent',
                             },
                         ]}>
-                        {props.label}
+                        {t(props.label)}
                     </Animated.Text>
                 ) : (
                     <Animated.Text
@@ -316,12 +318,12 @@ const CustomInput = forwardRef<TextInput, CustomInputProps>((props, ref) => {
                                 backgroundColor: isFocused ? '#ffffff' : 'transparent',
                             },
                         ]}>
-                        {props.label}
+                        {t(props.label)}
                     </Animated.Text>
                 )
             ) : (
                 <Text style={[styles.placeholder]}>
-                    {props.selectedValue ? '' : props.label}
+                    {props.selectedValue ? '' : t(props.label)}
                 </Text>
             )}
 

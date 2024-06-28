@@ -1,5 +1,14 @@
 {
   "signin": "Sign in screen",
   "signup": "Sign Up screen",
-  "next-screen":"Next Screen"
+  "signin-account":"Sign In to your account.",
+  "forgot-password":"Forgot Password?",
+  "next-screen":"Next Screen",
+  "full-name":"Full Name",
+  "phone":"Phone",
+  "email":"Email",
+  "password":"Password",
+  "confirm-password":"Confirm Password",
+  "continue":"Continue",
+  "change-lang": "भाषा बदलें"
 }

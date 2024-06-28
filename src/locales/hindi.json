@@ -1,5 +1,14 @@
+
 {
-  "signin": "साइन इन स्क्रीन",
-  "signup": "साइन अप स्क्रीन",
-  "next-screen": "अगली स्क्रीन"
+"signin": "साइन इन स्क्रीन",
+"signup": "साइन अप स्क्रीन",
+"next-screen": "अगला स्क्रीन",
+"full-name": "पूरा नाम",
+"email": "ईमेल",
+"phone": "फ़ोन",
+"password": "पासवर्ड",
+"confirm-password": "पासवर्ड की पुष्टि करें",
+"continue": "जारी रखें",
+"change-lang": "भाषा बदलें",
+"change-lang":"Change Language"
 }
