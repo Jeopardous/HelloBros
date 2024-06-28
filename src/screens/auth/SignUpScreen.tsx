@@ -178,8 +178,6 @@ const SignUpScreen = () => {
                     <Text style={styles.btnTxt}>{t("change-lang")}</Text>
                 </TouchableOpacity>
             </View>
-
-
         </View>
     )
 }

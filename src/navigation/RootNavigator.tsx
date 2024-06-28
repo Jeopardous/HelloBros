@@ -18,7 +18,9 @@ const RootNavigator = () => {
     }, [])
     return (
         <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator>
+            <Stack.Navigator screenOptions={{
+                headerShown: false
+            }}>
                 <Stack.Screen name='Auth' component={AuthScreen}></Stack.Screen>
                 <Stack.Screen name='SignUp' component={SignUpScreen}></Stack.Screen>
                 {/* <Stack.Screen name='SignIn' component={SignInScreen}></Stack.Screen> */}
