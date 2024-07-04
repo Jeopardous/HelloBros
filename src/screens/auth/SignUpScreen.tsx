@@ -132,7 +132,7 @@ const SignUpScreen = () => {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView testID='SIGNUP_SCREEN'>
             <View style={{ marginTop: 30 }}>
                 {signupFields.map((fields, index) => {
                     const fieldName = fields.name as keyof typeof formValues

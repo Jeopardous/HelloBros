@@ -38,10 +38,10 @@ const AuthScreen = () => {
                 />
             </View>
             <View style={styles.footer}>
-                <TouchableOpacity onPress={() => onSignIn()} style={styles.buttonPrimary}>
+                <TouchableOpacity testID='SIGN_IN_BUTTON' onPress={() => onSignIn()} style={styles.buttonPrimary}>
                     <Text style={styles.signinTxt}>{t("signin")}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => NavigationActions.navigate("SignUp")} style={styles.buttonSec}>
+                <TouchableOpacity testID="SIGN_UP_BUTTON" onPress={() => NavigationActions.navigate("SignUp")} style={styles.buttonSec}>
                     <Text style={styles.signupTxt}>{t("signup")}</Text>
                 </TouchableOpacity>
 
