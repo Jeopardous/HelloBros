@@ -52,7 +52,7 @@ const SignInScreen: React.FC<BottomSheetProps> = ({ onToggle }) => {
 
     return (
         <GestureDetector gesture={pan}>
-            <Animated.View style={[styles.bottomSheet, translateY]}>
+            <Animated.View testID={"SIGN_IN_BOTTOM_SHEET"} style={[styles.bottomSheet, translateY]}>
                 <View style={styles.sheetHeader}>
                     <Text style={styles.headerTxt}> {t("signin-account")}</Text>
                 </View>
