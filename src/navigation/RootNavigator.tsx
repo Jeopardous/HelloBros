@@ -19,7 +19,7 @@ const RootNavigator = () => {
     }, [])
     return (
         <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name='Connect' component={ConnectDevice}></Stack.Screen>
 
                 <Stack.Screen name='Auth' component={AuthScreen}></Stack.Screen>
