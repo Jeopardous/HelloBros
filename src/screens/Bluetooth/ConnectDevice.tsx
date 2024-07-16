@@ -38,7 +38,7 @@ const ConnectDevice = () => {
         await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_ADVERTISE);
         await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION);
         await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-        startScanning()
+        // startScanning()
     };
 
     const startScanning = () => {
@@ -205,7 +205,26 @@ const ConnectDevice = () => {
     };
 
 
+    const calculateDistance = (rssi: number) => {
+        const txPower = -59; // Adjust this value based on your device's TX power
+        if (rssi === 0) {
+            return -1.0;
+        }
+
+        const ratio = rssi * 1.0 / txPower;
+
+        console.log("RATIO::::", ratio)
+        if (ratio < 1.0) {
+            console.log("RATIO<1::::", ratio, Math.pow(ratio, 10))
+
+            return Math.pow(ratio, 10);
+        } else {
+            const distance = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
+            return distance;
+        }
+    };
     const renderItem = ({ item, index }: any) => {
+        console.log("BLE ITEM:::", JSON.stringify(item))
         return (
             <View>
                 <View style={styles.bleCard}>
@@ -213,6 +232,9 @@ const ConnectDevice = () => {
                     <TouchableOpacity onPress={() => item.id === currentDevice?.id ? onDisconnect() : onConnect(item, index)} style={styles.button}>
                         <Text style={styles.btnTxt}>{item.id === currentDevice?.id ? "Disconnect" : "Connect"}</Text>
                     </TouchableOpacity>
+                </View>
+                <View>
+                    <Text>{`Proximity Distance: ${calculateDistance(item.rssi).toFixed(2)}`}</Text>
                 </View>
 
 

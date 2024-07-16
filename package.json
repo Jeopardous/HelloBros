@@ -24,6 +24,7 @@
     "react-native": "0.73.4",
     "react-native-ble-manager": "^11.5.0",
     "react-native-ble-plx": "^3.2.1",
+    "react-native-bluetooth-classic": "^1.73.0-rc.11",
     "react-native-country-picker-modal": "^2.0.0",
     "react-native-gesture-handler": "^2.15.0",
     "react-native-reanimated": "^3.7.1",
