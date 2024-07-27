@@ -17,6 +17,8 @@ const ConnectDevice = () => {
     const [currentDevice, setCurrentDevice] = useState(null)
     const [temperature, setTemperature] = useState<string | null>(null);
     const [humidity, setHumidity] = useState<string | null>(null);
+    const [distance, setDistance] = useState<number | null>(null);
+    const [status, setStatus] = useState<string>('Lock');
     useEffect(() => {
         BleManager.enableBluetooth().then(() => {
             console.log('Bluetooth is turned on!');
@@ -119,6 +121,7 @@ const ConnectDevice = () => {
             const res = await BleManager.retrieveServices(item.id);
             console.log("RES::::", JSON.stringify(res))
             onServicesDiscovered(res, item)
+            startDistanceCheck(item)
         } catch (error) {
             // Failure code
             console.error(error);
@@ -128,6 +131,8 @@ const ConnectDevice = () => {
     const onDisconnect = () => {
         BleManager.disconnect(currentDevice?.id).then(() => {
             setCurrentDevice(null)
+            clearInterval(distanceInterval);
+            setStatus('Lock');
         })
     }
 
@@ -223,6 +228,22 @@ const ConnectDevice = () => {
             return distance;
         }
     };
+
+    let distanceInterval: NodeJS.Timeout;
+
+    const startDistanceCheck = (item: any) => {
+        distanceInterval = setInterval(() => {
+            BleManager.readRSSI(item.id)
+                .then(rssi => {
+                    const distance = calculateDistance(rssi);
+                    setDistance(distance);
+                    setStatus(distance < 3 ? 'Unlock' : 'Lock');
+                })
+                .catch(error => {
+                    console.error('Error reading RSSI:', error);
+                });
+        }, 3000); // Adjust the interval time as needed
+    };
     const renderItem = ({ item, index }: any) => {
         console.log("BLE ITEM:::", JSON.stringify(item))
         return (
@@ -233,11 +254,6 @@ const ConnectDevice = () => {
                         <Text style={styles.btnTxt}>{item.id === currentDevice?.id ? "Disconnect" : "Connect"}</Text>
                     </TouchableOpacity>
                 </View>
-                <View>
-                    <Text>{`Proximity Distance: ${calculateDistance(item.rssi).toFixed(2)}`}</Text>
-                </View>
-
-
             </View>
 
         )
@@ -246,6 +262,11 @@ const ConnectDevice = () => {
     return (
         <View style={{ flex: 1 }}>
             <View style={styles.fullRow}>
+                {/* <View style={styles.tempCard}>
+                    <Text style={styles.label}>{status == "Lock" ? "Locked" : "Unlocked"}</Text>
+                    <Image style={styles.icon} source={status == "Lock" ? require('../../assets/images/locked.png') : require('../../assets/images/unlocked.png')} />
+                    <Text style={styles.label}>{`${distance ? distance.toFixed(2) + "m" : "N/A"}`}</Text>
+                </View> */}
                 <View style={styles.tempCard}>
                     <Text style={styles.label}>Temperature</Text>
                     <Image style={styles.icon} source={require('../../assets/images/temperature.png')} />
@@ -338,7 +359,8 @@ const styles = StyleSheet.create({
         width: "100%",
         flexDirection: "row",
         justifyContent: "space-around",
-        marginTop: hp(2)
+        marginTop: hp(2),
+        alignSelf: "center"
     },
     scanBtn: {
         width: "90%",
