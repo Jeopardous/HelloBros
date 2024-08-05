@@ -1,34 +1,22 @@
 
-import React, { useEffect, useState } from 'react';
-import type { PropsWithChildren } from 'react';
+import dayjs from 'dayjs';
+import i18next from 'i18next';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-    Dimensions,
-    Image,
-    ImageBackground,
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
     StyleSheet,
-    Text,
-    TouchableOpacity,
-    useColorScheme,
-    View,
+    View
 } from 'react-native';
-import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
-    widthPercentageToDP as wp,
     heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import { DateType } from 'react-native-ui-datepicker';
-import dayjs from 'dayjs';
-import NavigationActions from '../../navigation/NavigationActions'
-import { validateEmail, validateName, validatePassword } from '../../utils/helper';
-import { signupFields } from '../../utils/constants';
-import CustomInput from '../../components/CustomInput';
+import SpeedoMeter from '../../components/SpeedoMeter';
 import { colors } from '../../utils/colors';
-import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
 import { fonts, fontSize } from '../../utils/fonts';
+import { validateEmail, validateName, validatePassword } from '../../utils/helper';
+import Gauge from '../../components/Gauge';
 
 const SignUpScreen = () => {
     const [formValues, setFormValues] = useState({
@@ -52,6 +40,14 @@ const SignUpScreen = () => {
     const [selectedValue, setSelectedValue] = useState('female');
     const [selectedDate, setSelectedDate] = useState<DateType>(dayjs());
     const [countryCode, setCountryCode] = useState('IN');
+
+    const [title, setTitle] = useState("Low")
+    const [title1, setTitle1] = useState("Low")
+    const [title2, setTitle2] = useState("Low")
+    const [title3, setTitle3] = useState("Low")
+
+
+
 
     const [lang, setLang] = useState('en')
 
@@ -130,55 +126,113 @@ const SignUpScreen = () => {
         i18next.changeLanguage(newLang)
         setLang(newLang)
     }
+    const onChangeTitle = (val: any) => {
+        if (val < 33) {
+            setTitle("Low");
+        } else if (val < 66) {
+            setTitle("Medium")
+        } else {
+            setTitle("High");
+        }
+    }
+    const onChangeTitle1 = (val: any) => {
+        if (val < 33) {
+            setTitle1("Low");
+        } else if (val < 66) {
+            setTitle1("Medium")
+        } else {
+            setTitle1("High");
+        }
+    }
+    const onChangeTitle2 = (val: any) => {
+        if (val < 33) {
+            setTitle2("Low");
+        } else if (val < 66) {
+            setTitle2("Medium")
+        } else {
+            setTitle2("High");
+        }
+    }
+    const onChangeTitle3 = (val: any) => {
+        if (val < 33) {
+            setTitle3("Low");
+        } else if (val < 66) {
+            setTitle3("Medium")
+        } else {
+            setTitle3("High");
+        }
+    }
 
     return (
-        <SafeAreaView>
-            <View style={{ marginTop: 30 }}>
-                {signupFields.map((fields, index) => {
-                    const fieldName = fields.name as keyof typeof formValues
-                    return (<View key={index}>
-                        <View key={index}>
-                            <CustomInput
-                                value={formValues[fieldName]}
-                                onChangeText={value => handleInputChange(fields.name, value)}
-                                label={fields.label}
-                                leftIcon={fields.leftIcon}
-                                rightIcon={fields.rightIcon}
-                                type={fields.type}
-                                selectedValue={selectedValue}
-                                selectedDate={selectedDate}
-                                handleValueChange={handleValueChange}
-                                handleChangeDate={handleDateChage}
-                                hidePassword={fields.hidePassword}
-                                showPassword={fields.showPassword}
-                                error={fieldErrors[fieldName]}
-                                callingCode={countryCode}
-                                onCountryCodeChange={handleCountryCode}
-                                keyboardType={
-                                    fields.type === 'phone' ? 'numeric' : 'default'
-                                }
-                            />
-                            {fieldErrors[fieldName] && (
-                                <Text style={styles.errorText}>
-                                    {fieldErrors[fieldName]}
-                                </Text>
-                            )}
-                        </View>
-                    </View>)
-                })}
-            </View>
-            <View style={{ marginTop: 30 }}>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.btnTxt}>{t("continue")}</Text>
-                </TouchableOpacity>
-            </View>
+        <View style={{ flex: 1 }}>
+            <View style={{ flex: 1 }}>
+                <SpeedoMeter />
 
-            <View style={{ marginTop: 30 }}>
-                <TouchableOpacity onPress={() => onChangeLang()} style={styles.button}>
-                    <Text style={styles.btnTxt}>{t("change-lang")}</Text>
-                </TouchableOpacity>
             </View>
-        </SafeAreaView>
+            {/* <View style={{ flex: 0.5, backgroundColor: "black", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
+                <Gauge
+                    size={150}
+                    strokeWidth={20}
+                    startAngle={195}
+                    endAngle={-15}
+                    percentage={20}
+                    gradientColors={["#49ff35", "#f3ff26", "#fd2020"]}
+                    indicator={true}
+                    title={title}
+                    onEndAnimation={(val: any) => onChangeTitle(val)}
+                    titleStyle={{ bottom: 20, }}
+                    containerStyle={{ backgroundColor: "transparent", marginLeft: 10, height: 110, marginTop: 10, }}
+                    indicatorViewStyle={{}}
+                    indicatorInnerViewStyle={{}}
+                />
+                <Gauge
+                    size={200}
+                    strokeWidth={20}
+                    startAngle={359}
+                    endAngle={0}
+                    percentage={50}
+                    gradientColors={["#56EEF4", "#56B5F5"]}
+                    indicator={true}
+                    title={title1}
+                    onEndAnimation={(val: any) => onChangeTitle1(val)}
+                    titleStyle={{ bottom: 90, }}
+                    containerStyle={{ backgroundColor: "transparent", marginLeft: 10, height: 200, marginTop: 10, }}
+                    indicatorViewStyle={{}}
+                    indicatorInnerViewStyle={{}}
+                />
+                <Gauge
+                    size={200}
+                    strokeWidth={20}
+                    startAngle={225}
+                    endAngle={-45}
+                    percentage={80}
+                    gradientColors={["white", "#f3ff26", "#fd2020"]}
+                    indicator={true}
+                    title={title2}
+                    onEndAnimation={(val: any) => onChangeTitle2(val)}
+                    titleStyle={{ bottom: 0, }}
+                    containerStyle={{ backgroundColor: "transparent", marginLeft: 10, height: 110, marginTop: 10, }}
+                    indicatorViewStyle={{}}
+                    indicatorInnerViewStyle={{}}
+                />
+                <Gauge
+                    size={150}
+                    strokeWidth={20}
+                    startAngle={180}
+                    endAngle={0}
+                    percentage={100}
+                    gradientColors={["#49ff35", "#f3ff26", "#fd2020", "blue"]}
+                    indicator={true}
+                    title={title3}
+                    onEndAnimation={(val: any) => onChangeTitle3(val)}
+                    titleStyle={{ bottom: 20, }}
+                    containerStyle={{ backgroundColor: "transparent", marginLeft: 10, height: 110, marginTop: 10, }}
+                    indicatorViewStyle={{}}
+                    indicatorInnerViewStyle={{}}
+                />
+            </View> */}
+        </View>
+
     )
 }
 
