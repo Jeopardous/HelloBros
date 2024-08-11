@@ -28,12 +28,13 @@ const RootNavigator = () => {
             <Stack.Navigator screenOptions={{
                 headerShown: false
             }}>
-              <Stack.Screen name='SignUp' component={SignUpScreen}></Stack.Screen>
-                <Stack.Screen name='Testing' component={TestingComponents}></Stack.Screen>
-              
                 <Stack.Screen name='Auth' component={AuthScreen}></Stack.Screen>
-                
-               <Stack.Screen name='Connect' component={ConnectDevice}></Stack.Screen>
+                <Stack.Screen name='SignUp' component={SignUpScreen}></Stack.Screen>
+                <Stack.Screen name='Testing' component={TestingComponents}></Stack.Screen>
+
+
+
+                <Stack.Screen name='Connect' component={ConnectDevice}></Stack.Screen>
                 {/* <Stack.Screen name='SignIn' component={SignInScreen}></Stack.Screen> */}
                 <Stack.Screen name='Home' component={HomeScreen}></Stack.Screen>
 

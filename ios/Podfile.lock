@@ -3,13 +3,13 @@ PODS:
   - BVLinearGradient (2.8.3):
     - React-Core
   - DoubleConversion (1.1.6)
-  - EXConstants (15.4.5):
+  - EXConstants (15.4.6):
     - ExpoModulesCore
   - EXFont (11.10.3):
     - ExpoModulesCore
-  - Expo (50.0.15):
+  - Expo (50.0.20):
     - ExpoModulesCore
-  - ExpoFileSystem (16.0.8):
+  - ExpoFileSystem (16.0.9):
     - ExpoModulesCore
   - ExpoKeepAwake (12.8.2):
     - ExpoModulesCore
@@ -40,6 +40,7 @@ PODS:
     - lottie-ios (= 4.4.1)
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - MultiplatformBleAdapter (0.2.0)
   - RCT-Folly (2022.05.16.00):
     - boost
     - DoubleConversion
@@ -911,11 +912,16 @@ PODS:
   - React-Mapbuffer (0.73.4):
     - glog
     - React-debug
-
-  - react-native-ble-manager (11.5.0):
-
-  - react-native-safe-area-context (4.10.5):
-
+  - react-native-ble-manager (11.5.5):
+    - React-Core
+  - react-native-ble-plx (3.2.1):
+    - glog
+    - MultiplatformBleAdapter (= 0.2.0)
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+  - react-native-bluetooth-classic (1.73.0-rc.12):
+    - React
+  - react-native-safe-area-context (4.10.8):
     - React-Core
   - React-nativeconfig (0.73.4)
   - React-NativeModulesApple (0.73.4):
@@ -1084,25 +1090,37 @@ PODS:
     - React-jsi (= 0.73.4)
     - React-logger (= 0.73.4)
     - React-perflogger (= 0.73.4)
-  - RNCAsyncStorage (1.23.1):
+  - RNCAsyncStorage (1.24.0):
     - React-Core
   - RNCMaskedView (0.3.1):
     - React-Core
-  - RNGestureHandler (2.17.1):
+  - RNGestureHandler (2.18.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNReanimated (3.12.1):
+  - RNReanimated (3.15.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNScreens (3.32.0):
+    - RNReanimated/reanimated (= 3.15.0)
+    - RNReanimated/worklets (= 3.15.0)
+  - RNReanimated/reanimated (3.15.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
+  - RNReanimated/worklets (3.15.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
+  - RNScreens (3.34.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - React-RCTImage
-  - RNSVG (15.3.0):
+  - RNSVG (15.5.0):
     - React-Core
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
@@ -1147,6 +1165,8 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-ble-manager (from `../node_modules/react-native-ble-manager`)
+  - react-native-ble-plx (from `../node_modules/react-native-ble-plx`)
+  - react-native-bluetooth-classic (from `../node_modules/react-native-bluetooth-classic`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1181,6 +1201,7 @@ SPEC REPOS:
     - fmt
     - libevent
     - lottie-ios
+    - MultiplatformBleAdapter
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1257,6 +1278,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-ble-manager:
     :path: "../node_modules/react-native-ble-manager"
+  react-native-ble-plx:
+    :path: "../node_modules/react-native-ble-plx"
+  react-native-bluetooth-classic:
+    :path: "../node_modules/react-native-bluetooth-classic"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-nativeconfig:
@@ -1318,10 +1343,10 @@ SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
-  EXConstants: 988aa430ca0f76b43cd46b66e7fae3287f9cc2fc
+  EXConstants: a5f6276e565d98f9eb4280f81241fc342d641590
   EXFont: f20669cb266ef48b004f1eb1f2b20db96cd1df9f
-  Expo: 0f04015e4254c8b7c74f3c4b2facdfd0b62152b0
-  ExpoFileSystem: eecaf6796aed0f4dd20042dc2ca2cac6c4bc1185
+  Expo: d86f597bbab83615207499c5b3bfd80992e2bbd3
+  ExpoFileSystem: 74cc0fae916f9f044248433971dcfc8c3befd057
   ExpoKeepAwake: 0f5cad99603a3268e50af9a6eb8b76d0d9ac956c
   ExpoModulesCore: 4a8928a228569301ac4fc4a1e846713e05754d05
   FBLazyVector: 84f6edbe225f38aebd9deaf1540a4160b1f087d7
@@ -1332,6 +1357,7 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
   lottie-react-native: 3b9199d34e014bcb71c46728992ef5c8026538bb
+  MultiplatformBleAdapter: b1fddd0d499b96b607e00f0faa8e60648343dc1d
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
   RCTRequired: ab7f915c15569f04a49669e573e6e319a53f9faa
   RCTTypeSafety: 63b97ced7b766865057e7154db0e81ce4ee6cf1e
@@ -1353,9 +1379,10 @@ SPEC CHECKSUMS:
   React-jsinspector: 9ac353eccf6ab54d1e0a33862ba91221d1e88460
   React-logger: 0a57b68dd2aec7ff738195f081f0520724b35dab
   React-Mapbuffer: 63913773ed7f96b814a2521e13e6d010282096ad
-  react-native-ble-manager: 6c363fafc625fcbdf19769c4efc51415742d3032
-  
-  react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
+  react-native-ble-manager: 26188ccddc07e62e06009b20c86a822d10baf994
+  react-native-ble-plx: 032cc45279283cd0e29e53b878bba16fd50d2a09
+  react-native-bluetooth-classic: 903bd85a5b8eb95258320a14fae1e71dc17d4cac
+  react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
   React-nativeconfig: d7af5bae6da70fa15ce44f045621cf99ed24087c
   React-NativeModulesApple: 0123905d5699853ac68519607555a9a4f5c7b3ac
   React-perflogger: 8a1e1af5733004bdd91258dcefbde21e0d1faccd
@@ -1376,12 +1403,12 @@ SPEC CHECKSUMS:
   React-runtimescheduler: ed48e5faac6751e66ee1261c4bd01643b436f112
   React-utils: 6e5ad394416482ae21831050928ae27348f83487
   ReactCommon: 840a955d37b7f3358554d819446bffcf624b2522
-  RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
+  RNCAsyncStorage: ec53e44dc3e75b44aa2a9f37618a49c3bc080a7a
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
-  RNGestureHandler: 1c2341f8a84794a483ed739c446dc9f3b5191908
-  RNReanimated: fa47e0572971cdb0b29b8eca683980e9c97e952f
-  RNScreens: f0edd01b3ab160acc31fb056622a1d7c2909a0a5
-  RNSVG: a48668fd382115bc89761ce291a81c4ca5f2fd2e
+  RNGestureHandler: 644fac271b233d59fe6e910ebc377d3fd066a57c
+  RNReanimated: 98ed8b33f88a749dc2fd2433a03ca4f4a9d2b690
+  RNScreens: 79f5606e7eb08dc81336f83a223fb6d6e74f32d1
+  RNSVG: b986585e367f4a49d8aa43065066cc9c290b3d9b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 1b901a6d6eeba4e8a2e8f308f708691cdb5db312
 

@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     StyleSheet,
+    Text,
+    TouchableOpacity,
     View
 } from 'react-native';
 import {
@@ -17,6 +19,9 @@ import { colors } from '../../utils/colors';
 import { fonts, fontSize } from '../../utils/fonts';
 import { validateEmail, validateName, validatePassword } from '../../utils/helper';
 import Gauge from '../../components/Gauge';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { signupFields } from '../../utils/constants';
+import CustomInput from '../../components/CustomInput';
 
 const SignUpScreen = () => {
     const [formValues, setFormValues] = useState({
@@ -165,9 +170,9 @@ const SignUpScreen = () => {
 
     return (
 
-//         <View style={{ flex: 1 }}>
-//             <View style={{ flex: 1 }}>
-//                 <SpeedoMeter />
+        //         <View style={{ flex: 1 }}>
+        //             <View style={{ flex: 1 }}>
+        //                 <SpeedoMeter />
 
         <SafeAreaView testID='SIGNUP_SCREEN'>
             <View style={{ marginTop: 30 }}>
@@ -210,7 +215,7 @@ const SignUpScreen = () => {
                 </TouchableOpacity>
             </View>
 
-//             </View>
+            {/* </View> */}
             {/* <View style={{ flex: 0.5, backgroundColor: "black", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
                 <Gauge
                     size={150}
@@ -273,8 +278,8 @@ const SignUpScreen = () => {
                     indicatorInnerViewStyle={{}}
                 />
             </View> */}
-//         </View>
-      </SafeAreaView>
+            {/* </View> */}
+        </SafeAreaView>
 
     )
 }
