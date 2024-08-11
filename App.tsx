@@ -42,9 +42,7 @@ const App: React.FC = () => {
             <RootNavigator />
           </GestureHandlerRootView>
         </PersistGate>
-
       </Provider>
-
     </I18nextProvider>
 
 

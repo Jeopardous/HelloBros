@@ -164,11 +164,53 @@ const SignUpScreen = () => {
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <View style={{ flex: 1 }}>
-                <SpeedoMeter />
 
+//         <View style={{ flex: 1 }}>
+//             <View style={{ flex: 1 }}>
+//                 <SpeedoMeter />
+
+        <SafeAreaView testID='SIGNUP_SCREEN'>
+            <View style={{ marginTop: 30 }}>
+                {signupFields.map((fields, index) => {
+                    const fieldName = fields.name as keyof typeof formValues
+                    return (<View key={index}>
+                        <View key={index}>
+                            <CustomInput
+                                value={formValues[fieldName]}
+                                onChangeText={value => handleInputChange(fields.name, value)}
+                                label={fields.label}
+                                leftIcon={fields.leftIcon}
+                                rightIcon={fields.rightIcon}
+                                type={fields.type}
+                                selectedValue={selectedValue}
+                                selectedDate={selectedDate}
+                                handleValueChange={handleValueChange}
+                                handleChangeDate={handleDateChage}
+                                hidePassword={fields.hidePassword}
+                                showPassword={fields.showPassword}
+                                error={fieldErrors[fieldName]}
+                                callingCode={countryCode}
+                                onCountryCodeChange={handleCountryCode}
+                                keyboardType={
+                                    fields.type === 'phone' ? 'numeric' : 'default'
+                                }
+                            />
+                            {fieldErrors[fieldName] && (
+                                <Text style={styles.errorText}>
+                                    {fieldErrors[fieldName]}
+                                </Text>
+                            )}
+                        </View>
+                    </View>)
+                })}
             </View>
+            <View style={{ marginTop: 30 }}>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.btnTxt}>{t("continue")}</Text>
+                </TouchableOpacity>
+            </View>
+
+//             </View>
             {/* <View style={{ flex: 0.5, backgroundColor: "black", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
                 <Gauge
                     size={150}
@@ -231,7 +273,8 @@ const SignUpScreen = () => {
                     indicatorInnerViewStyle={{}}
                 />
             </View> */}
-        </View>
+//         </View>
+      </SafeAreaView>
 
     )
 }
