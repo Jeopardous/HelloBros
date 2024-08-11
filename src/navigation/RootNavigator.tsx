@@ -7,7 +7,12 @@ import SignInScreen from '../screens/auth/SignInScreen'
 import NavigationActions from './NavigationActions'
 import AuthScreen from '../screens/auth/AuthScreen'
 import HomeScreen from '../screens/home/HomeScreen'
+
+import ConnectDevice from '../screens/Bluetooth/ConnectDevice'
+import BluetoothDiscovery from '../screens/Bluetooth/BluetoothDiscovery'
+
 import TestingComponents from '../screens/auth/TestingComponents'
+
 
 const RootNavigator = () => {
     const Stack = createNativeStackNavigator()
@@ -19,14 +24,19 @@ const RootNavigator = () => {
     }, [])
     return (
         <NavigationContainer ref={navigationRef}>
+
             <Stack.Navigator screenOptions={{
                 headerShown: false
             }}>
+              <Stack.Screen name='SignUp' component={SignUpScreen}></Stack.Screen>
                 <Stack.Screen name='Testing' component={TestingComponents}></Stack.Screen>
+              
                 <Stack.Screen name='Auth' component={AuthScreen}></Stack.Screen>
-                <Stack.Screen name='SignUp' component={SignUpScreen}></Stack.Screen>
+                
+               <Stack.Screen name='Connect' component={ConnectDevice}></Stack.Screen>
                 {/* <Stack.Screen name='SignIn' component={SignInScreen}></Stack.Screen> */}
                 <Stack.Screen name='Home' component={HomeScreen}></Stack.Screen>
+
 
 
 

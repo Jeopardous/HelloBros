@@ -5,6 +5,7 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import { colors } from '../utils/colors';
 const RippleEffect = () => {
 
     const scaleValue = useSharedValue(1);
@@ -39,7 +40,7 @@ const RippleEffect = () => {
             <View style={[styles.circle]}>
                 <Animated.View style={[animatedCircle, styles.innerCircle]}>
                 </Animated.View>
-                <Animated.Text style={[animatedTextStyle, styles.innerText]}> Connecting</Animated.Text>
+                <Animated.Text style={[animatedTextStyle, styles.innerText]}>Scanning</Animated.Text>
             </View>
         </View>
     )
@@ -58,13 +59,13 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 200,
-        backgroundColor: '#F0A210'
+        backgroundColor: colors.primary
     },
     innerCircle: {
         width: "100%",
         height: "100%",
         borderRadius: 200,
-        backgroundColor: '#F0A210',
+        backgroundColor: colors.primary,
         justifyContent: "center",
     },
     innerText: {
