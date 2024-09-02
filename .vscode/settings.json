@@ -1,3 +1,10 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "vscode_custom_css.imports": [
+    "file:///Users/adarshsharma/.vscode/extensions/synthwave-x-fluoromachine-adarsh.css"
+    ]
+    // "vscode_custom_css.imports": [
+    // "file:///Users/adarshsharma/.vscode/extensions/epic-80s-transitions.css"
+    // ]
+    
 }
